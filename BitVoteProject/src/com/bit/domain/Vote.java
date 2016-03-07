@@ -18,8 +18,7 @@ public class Vote {
 
 	@Override
 	public String toString() {
-		return "Vote [voteid=" + voteid + ", content=" + content + ", regdate=" + regdate + ", roomid=" + roomid
-				+ ", lastdate=" + lastdate + "]";
+		return "力格 : " + content + "  累己老 : "  + regdate + "   付皑老 : " + lastdate;
 	}
 	
 	public String getVoidId(){

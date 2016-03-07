@@ -21,19 +21,19 @@ public abstract class AbstractVote {
 
 	public void excuteJob() throws Exception{
 		try{
-			connect();
-			excute();
+			connect();//오라클과 연결을 하고
+			excute();//작업을 수행한 다음에 
 		}catch(Exception e){
 			throw e;
 		}finally{
-			closeAll();
+			closeAll();//종료한다.
 		}
 	}
 
 	protected abstract void excute() throws Exception;
 
 	private void connect() throws Exception{
-		con = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.34:1521:xe", "user162", "user162");
+		con = DriverManager.getConnection("jdbc:oracle:thin:@192.168.0.4:1521:xe", "Hyun", "inside501463");
 
 	}
 

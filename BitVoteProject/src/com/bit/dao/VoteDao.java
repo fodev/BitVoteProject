@@ -7,7 +7,8 @@ import com.bit.domain.Member;
 import com.bit.domain.Vote;
 import com.bit.domain.VoteChoice;
 
-public class VoteDao {
+public class VoteDao {//차후 싱글턴으로 개선 필요
+	
 	public List<Vote> getVoteList(Member user) throws Exception{//내가 할 수 있는 투표 목록을 가지고 오는 함수.
 		StringBuilder str=new StringBuilder();
 		str.append("select * from ");
@@ -37,13 +38,22 @@ public class VoteDao {
 				
 				rs=pstmt.executeQuery();
 				
+				int count=0;
 				while(rs.next()){
+					count++;
 					list.add(new Vote(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5)));
 				}
-				
+				if(count==0)
+					throw new NotFoundVoteException();
 			}
 		}.excuteJob();
 		return list;
+	}
+	
+	public class NotFoundVoteException extends Exception{
+		public NotFoundVoteException() {
+			super("참여가능한 투표가 없습니다.");
+		}
 	}
 	
 	public List<VoteChoice> getChoiceList(Vote vote) throws Exception{
