@@ -6,7 +6,7 @@ public class Main {
 //			new LoginUI().startUI();
 //			new VoteUI().startUI();
 //		}catch(Exception e){
-//			System.out.println(e.getMessage());
+//			System.out.println(e.getMe-ssage());
 //		}
 		
 		try {
