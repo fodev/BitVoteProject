@@ -14,7 +14,7 @@ public class ChatAgent extends AbstractAgent {
 	Member user;
 	List<Vote> voteList;//현재 사용자가 투표할 수 있는 정보들
 	List<VoteChoice> choiceList;
-	
+
 	public ChatAgent(Socket socket) throws Exception {
 		super(socket);
 	}
@@ -23,16 +23,16 @@ public class ChatAgent extends AbstractAgent {
 	protected void execute() throws Exception {
 		String msg=readMsg();
 		VoteMsg voteMsg= new VoteMsg(msg);//메시지를 읽어서 분할한다.
-		
+
 		switch(voteMsg.id){
 		case "F1":
 			try{
 				user=new Member(voteMsg.content1, voteMsg.content2);
 				VoteService.INSTANCE.loginUser(user);
 				writeMsg("로그인이 완료되었습니다");
-				
+
 				printVoteList();
-				
+
 			}catch(IdSearchFailException e1){//로그인실패시 경고메시지
 				writeMsg(e1.getMessage());
 			}catch(NoMachingPwdException e2){
@@ -49,18 +49,27 @@ public class ChatAgent extends AbstractAgent {
 				writeMsg(choiceList.get(i).toString());
 			}
 			break;
-		case "F3"://투표에 응답을 한경우
-			VoteService.INSTANCE.inputVote(user,voteList.get(Integer.parseInt(voteMsg.content1)), choiceList.get(Integer.parseInt(voteMsg.content2)));
+		case "F3"://투표에 응답을 한경우			
+			System.out.println(choiceList.get(Integer.parseInt(voteMsg.content2)));
+			VoteService.INSTANCE.inputVote(user,voteList.get(Integer.parseInt(voteMsg.content1)), choiceList.get(Integer.parseInt(voteMsg.content2)-1));
 			printVoteList();//유저가 투표를 하고 나면 갱신을 해줌.
 			break;
 
 		}
 	}
-	
+
 	private void printVoteList() throws Exception{
-		voteList=VoteService.INSTANCE.getVoteList(user);
-		for (int i = 0; i < voteList.size(); i++) {
-			writeMsg(i+"번째 "+voteList.get(i));
+		try{
+			voteList=VoteService.INSTANCE.getVoteList(user);
+			String msg="";
+			for (int i = 0; i < voteList.size(); i++) {
+				msg+=i+"번째 "+voteList.get(i)+"\n";
+			}
+			System.out.println(msg);
+			writeMsg(msg);
+		}catch(NotFoundVoteException e){
+			writeMsg(e.getMessage());
 		}
+
 	}
 }
